@@ -76,6 +76,7 @@ open class HomeViewModel(application: Application): AndroidViewModel(application
     fun uploadImage(
         uri: Uri,
         description: String,
+        username: String,
         onUploadSuccess: () -> Unit,
         onUploadFailed: () -> Unit
     ) {
@@ -91,8 +92,9 @@ open class HomeViewModel(application: Application): AndroidViewModel(application
             val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
             val imagePart = MultipartBody.Part.createFormData("image", file.name, requestFile)
             val descriptionPart = description.toRequestBody("text/plain".toMediaType())
+            val usernamePart = username.toRequestBody("text/plain".toMediaType())
 
-            val response = userRepository.uploadImage(imagePart, descriptionPart)
+            val response = userRepository.uploadImage(imagePart, descriptionPart, usernamePart)
             if (response) {
                 onUploadSuccess()
             } else {

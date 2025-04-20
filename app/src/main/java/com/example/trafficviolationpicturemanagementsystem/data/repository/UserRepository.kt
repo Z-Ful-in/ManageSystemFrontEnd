@@ -107,9 +107,9 @@ class UserRepository(private val context: Context) {
         }
     }
 
-    suspend fun uploadImage(imagePart: MultipartBody.Part, descriptionPart: RequestBody):Boolean {
+    suspend fun uploadImage(imagePart: MultipartBody.Part, descriptionPart: RequestBody, usernamePart: RequestBody):Boolean {
         return try {
-            val response = RetrofitClient.apiService.uploadImage(imagePart, descriptionPart)
+            val response = RetrofitClient.apiService.uploadImage(imagePart, descriptionPart, usernamePart)
             response
         } catch (e: Exception) {
             e.printStackTrace()

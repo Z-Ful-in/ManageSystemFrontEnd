@@ -38,7 +38,7 @@ interface ApiService {
     @POST("/images/upload")
     suspend fun uploadImage(
         @Part image: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody,
+        @Part("userName") userName: RequestBody
     ): Boolean
-    // @POST("/images/upload")
 }

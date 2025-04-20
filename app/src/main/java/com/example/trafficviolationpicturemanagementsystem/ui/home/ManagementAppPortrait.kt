@@ -390,6 +390,7 @@ fun UploadScreen(
                     viewModel.uploadImage(
                         selectedImageUri!!,
                         description,
+                        username = viewModel.userName.value ?: "",
                         onUploadSuccess = {
                             dialogState = UploadDialogState.UploadSuccess("图片上传成功")
                             viewModel.getUserImages()
