@@ -3,6 +3,9 @@ package com.example.trafficviolationpicturemanagementsystem.ui.login
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -50,7 +53,7 @@ fun LoginScreen(
     var loading by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -143,6 +146,7 @@ fun LoginScreen(
         ) {
             Text(text = "Login")
         }
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.click_to_register),
             color = Color.Blue,
@@ -151,7 +155,7 @@ fun LoginScreen(
                     onSwitchToRegister()
                 }
                 .padding(4.dp),
-            fontSize = 10.sp,
+            fontSize = 16.sp,
             style = TextStyle(textDecoration = TextDecoration.Underline)
         )
     }

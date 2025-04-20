@@ -3,6 +3,8 @@ package com.example.trafficviolationpicturemanagementsystem.ui.register
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -41,7 +43,8 @@ fun RegisterScreen(
     var loading by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -118,6 +121,7 @@ fun RegisterScreen(
         ) {
             Text(text = "Register")
         }
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Click to Login",
             color = Color.Blue,
@@ -126,7 +130,7 @@ fun RegisterScreen(
                     onSwitchToLogin()
                 }
                 .padding(4.dp),
-            fontSize = 10.sp,
+            fontSize = 16.sp,
             style = TextStyle(textDecoration = TextDecoration.Underline)
         )
     }
