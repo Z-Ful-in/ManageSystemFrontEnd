@@ -35,7 +35,7 @@ interface ApiService {
     ): Boolean
 
     @Multipart
-    @POST("/images/upload")
+    @POST("/images/upload_image")
     suspend fun uploadImage(
         @Part image: MultipartBody.Part,
         @Part("description") description: RequestBody,

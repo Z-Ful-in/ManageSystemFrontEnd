@@ -31,6 +31,7 @@ open class HomeViewModel(application: Application): AndroidViewModel(application
 
     init {
         _isPageSelected.value = 0
+        getUserName()
     }
     fun getUserName(){
        viewModelScope.launch {
