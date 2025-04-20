@@ -31,13 +31,19 @@ open class HomeViewModel(application: Application): AndroidViewModel(application
 
     init {
         _isPageSelected.value = 0
-        getUserName()
-        getUserImages()
     }
     fun getUserName(){
        viewModelScope.launch {
           _userName.value = userRepository.getUserName()
        }
+    }
+
+    fun loadData(){
+        viewModelScope.launch {
+            val name = userRepository.getUserName()
+            _userName.value = name
+            _userImageList.value = userRepository.getUserImages(name)
+        }
     }
 
     fun onViewClick(){

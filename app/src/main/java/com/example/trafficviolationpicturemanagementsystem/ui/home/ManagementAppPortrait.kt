@@ -90,6 +90,7 @@ fun HomeScreen(
 ) {
     val userName by homeViewModel.userName.observeAsState("")
     val isPageSelected by homeViewModel.isPageSelected.observeAsState(0)
+
     Surface(
         modifier = modifier
             .fillMaxSize(),

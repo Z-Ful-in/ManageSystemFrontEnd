@@ -28,15 +28,17 @@ import com.example.trafficviolationpicturemanagementsystem.data.repository.Login
 import com.example.trafficviolationpicturemanagementsystem.ui.login.LoginScreen
 import com.example.trafficviolationpicturemanagementsystem.ui.register.RegisterScreen
 import com.example.trafficviolationpicturemanagementsystem.viewmodel.AuthViewModel
+import com.example.trafficviolationpicturemanagementsystem.viewmodel.HomeViewModel
 import com.example.trafficviolationpicturemanagementsystem.viewmodel.MockAuthViewModel
 
 @Composable
 fun LoginRegisterScreen(
-    viewModel: AuthViewModel,
-    navController: NavController
+    authViewModel: AuthViewModel,
+    navController: NavController,
+    homeViewModel: HomeViewModel
 ) {
     var isRegistered by remember { mutableStateOf(true) }
-    val loginRegisterResult by viewModel.loginRegisterResult.observeAsState()
+    val loginRegisterResult by authViewModel.loginRegisterResult.observeAsState()
 
     if(isRegistered){
         AuthContainer(
@@ -45,16 +47,17 @@ fun LoginRegisterScreen(
             LoginScreen(
                 onSwitchToRegister = {
                     isRegistered = false
-                    viewModel.clearResult()
+                    authViewModel.clearResult()
                 },
                 onLogin = { username, password ->
-                    viewModel.login(username, password) {
+                    authViewModel.login(username, password) {
+                        homeViewModel.loadData()
                         navController.navigate("home") {
                             popUpTo("login") { inclusive = false }
                         }
                     }
                 },
-                viewModel,
+                authViewModel,
                 userNameError = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else "",
                 passwordError = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else ""
             )
@@ -66,14 +69,14 @@ fun LoginRegisterScreen(
             RegisterScreen(
                 onSwitchToLogin = {
                     isRegistered = true
-                    viewModel.clearResult()
+                    authViewModel.clearResult()
                 },
                 onRegister = { username, password ->
-                    viewModel.register(username, password) {
+                    authViewModel.register(username, password) {
                         isRegistered = true
                     }
                 },
-                viewModel,
+                authViewModel,
                 usernameRegistered = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else ""
             )
         }
@@ -109,9 +112,11 @@ fun AuthContainer(
 @Composable
 fun LoginRegisterScreenPreview() {
     val viewModel = MockAuthViewModel(Application())
+    val homeViewModel = HomeViewModel(Application())
     val navController = rememberNavController()
     LoginRegisterScreen(
-        viewModel = viewModel,
-        navController = navController
+        authViewModel = viewModel,
+        navController = navController,
+        homeViewModel = homeViewModel
     )
 }

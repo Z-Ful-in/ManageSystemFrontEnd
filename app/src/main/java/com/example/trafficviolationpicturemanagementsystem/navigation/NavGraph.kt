@@ -24,7 +24,7 @@ fun AppNavGraph(
         navController = navController,
         startDestination = startDestination
     ){
-        composable("login"){ LoginRegisterScreen(authViewModel, navController) }
+        composable("login"){ LoginRegisterScreen(authViewModel, navController, homeViewModel) }
         composable("home"){ ManagementAppPortrait(homeViewModel, navController) }
     }
 }
