@@ -63,6 +63,7 @@ fun LoginScreen(
             onValueChange = {
                 username = it
                 isUsernameEmpty = false
+                loading = false
             },
             label = { Text(stringResource(R.string.username_label)) },
             placeholder = { Text(stringResource(R.string.username_placeholder)) },
@@ -88,6 +89,7 @@ fun LoginScreen(
             onValueChange = {
                 password = it
                 isPasswordEmpty = false
+                loading = false
             },
             label = { Text(stringResource(R.string.password_label)) },
             placeholder = { Text(stringResource(R.string.password_placeholder)) },
