@@ -133,7 +133,7 @@ fun HomeScreen(
             }
             else if (isPageSelected == 1) {
                 UploadScreen(
-                    viewModel = homeViewModel,
+                    homeViewModel,
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f)
@@ -325,7 +325,7 @@ fun DeleteImageButton(
 
 @Composable
 fun UploadScreen(
-    viewModel: HomeViewModel,
+    homeViewModel: HomeViewModel,
     modifier: Modifier
 ){
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -387,13 +387,13 @@ fun UploadScreen(
         Button(
             onClick = {
                 if (selectedImageUri != null && description.isNotEmpty()) {
-                    viewModel.uploadImage(
+                    homeViewModel.uploadImage(
                         selectedImageUri!!,
                         description,
-                        username = viewModel.userName.value ?: "",
+                        username = homeViewModel.userName.value ?: "",
                         onUploadSuccess = {
                             dialogState = UploadDialogState.UploadSuccess("图片上传成功")
-                            viewModel.getUserImages()
+                            homeViewModel.getUserImages()
                         },
                         onUploadFailed = {
                             dialogState = UploadDialogState.NetworkError("网络连接失败， 请检查你的网络设置")
