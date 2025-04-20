@@ -11,4 +11,5 @@
     <string name="confirm_label">Confirm Password</string>
     <string name="confirm_placeholder">Re-enter your password</string>
     <string name="confirm_password_hint">Password not match</string>
+    <string name="App_title">Traffic Violation Picture Management</string>
 </resources>

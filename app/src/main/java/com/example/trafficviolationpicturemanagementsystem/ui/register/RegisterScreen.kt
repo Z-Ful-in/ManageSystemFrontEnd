@@ -3,11 +3,8 @@ package com.example.trafficviolationpicturemanagementsystem.ui.register
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -42,103 +39,96 @@ fun RegisterScreen(
     var passwordNotConfirmed by remember { mutableStateOf(false) }
 
     var loading by remember { mutableStateOf(false) }
-    Scaffold { innerPadding ->
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ){
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Register",
-                    modifier = Modifier.padding(bottom = 32.dp),
-                    fontSize = 24.sp,
-                )
-                TextField(
-                    value = username,
-                    onValueChange = {
-                        username = it
-                        usernameError = ""
-                    },
-                    label = { Text(stringResource(R.string.username_label)) },
-                    placeholder = { Text(stringResource(R.string.username_placeholder)) },
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    isError = usernameError.isNotBlank(),
-                    supportingText = {
-                        if(usernameError.isNotBlank()){
-                            Text(usernameError)
-                        }
-                        else if (usernameRegistered.isNotBlank()){
-                            Text(usernameRegistered)
-                        }
-                    }
-                )
-                TextField(
-                    value = password,
-                    onValueChange = {
-                        password = it
-                        passwordError = ""
-                    },
-                    label = { Text(stringResource(R.string.password_label)) },
-                    placeholder = { Text(stringResource(R.string.password_placeholder)) },
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    isError = passwordError.isNotBlank(),
-                    supportingText = {
-                        if(passwordError.isNotBlank()){
-                            Text(passwordError)
-                        }
-                    },
-                    visualTransformation = PasswordVisualTransformation(),
-                )
-                TextField(
-                    value = confirmPassword,
-                    onValueChange = {
-                        confirmPassword = it
-                        passwordNotConfirmed = false
-                    },
-                    label = { Text(stringResource(R.string.confirm_label)) },
-                    placeholder = { Text(stringResource(R.string.confirm_placeholder)) },
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    isError = passwordNotConfirmed,
-                    supportingText = {
-                        if(passwordNotConfirmed){
-                            Text(stringResource(R.string.confirm_password_hint))
-                        }
-                    },
-                    visualTransformation = PasswordVisualTransformation(),
-                )
-                Button(
-                    onClick = {
-                        usernameError = checkUsername(username)
-                        passwordError = checkPassword(password)
-                        passwordNotConfirmed = password != confirmPassword
-                        if (usernameError.isBlank() && passwordError.isBlank() && !passwordNotConfirmed) {
-                            onRegister(username, password)
-                            loading = true
-                        }
-                    },
-                    modifier = Modifier.padding(top = 8.dp),
-                    enabled = !loading,
-                ) {
-                    Text(text = "Register")
+
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Register",
+            modifier = Modifier.padding(bottom = 32.dp),
+            fontSize = 24.sp,
+        )
+        TextField(
+            value = username,
+            onValueChange = {
+                username = it
+                usernameError = ""
+            },
+            label = { Text(stringResource(R.string.username_label)) },
+            placeholder = { Text(stringResource(R.string.username_placeholder)) },
+            modifier = Modifier.padding(bottom = 8.dp),
+            isError = usernameError.isNotBlank(),
+            supportingText = {
+                if(usernameError.isNotBlank()){
+                    Text(usernameError)
                 }
-                Text(
-                    text = "Click to Login",
-                    color = Color.Blue,
-                    modifier = Modifier
-                        .clickable {
-                            onSwitchToLogin()
-                        }
-                        .padding(4.dp),
-                    fontSize = 10.sp,
-                    style = TextStyle(textDecoration = TextDecoration.Underline)
-                )
+                else if (usernameRegistered.isNotBlank()){
+                    Text(usernameRegistered)
+                }
             }
+        )
+        TextField(
+            value = password,
+            onValueChange = {
+                password = it
+                passwordError = ""
+            },
+            label = { Text(stringResource(R.string.password_label)) },
+            placeholder = { Text(stringResource(R.string.password_placeholder)) },
+            modifier = Modifier.padding(bottom = 8.dp),
+            isError = passwordError.isNotBlank(),
+            supportingText = {
+                if(passwordError.isNotBlank()){
+                    Text(passwordError)
+                }
+            },
+            visualTransformation = PasswordVisualTransformation(),
+        )
+        TextField(
+            value = confirmPassword,
+            onValueChange = {
+                confirmPassword = it
+                passwordNotConfirmed = false
+            },
+            label = { Text(stringResource(R.string.confirm_label)) },
+            placeholder = { Text(stringResource(R.string.confirm_placeholder)) },
+            modifier = Modifier.padding(bottom = 8.dp),
+            isError = passwordNotConfirmed,
+            supportingText = {
+                if(passwordNotConfirmed){
+                    Text(stringResource(R.string.confirm_password_hint))
+                }
+            },
+            visualTransformation = PasswordVisualTransformation(),
+        )
+        Button(
+            onClick = {
+                usernameError = checkUsername(username)
+                passwordError = checkPassword(password)
+                passwordNotConfirmed = password != confirmPassword
+                if (usernameError.isBlank() && passwordError.isBlank() && !passwordNotConfirmed) {
+                    onRegister(username, password)
+                    loading = true
+                }
+            },
+            modifier = Modifier.padding(top = 8.dp),
+            enabled = !loading,
+        ) {
+            Text(text = "Register")
         }
+        Text(
+            text = "Click to Login",
+            color = Color.Blue,
+            modifier = Modifier
+                .clickable {
+                    onSwitchToLogin()
+                }
+                .padding(4.dp),
+            fontSize = 10.sp,
+            style = TextStyle(textDecoration = TextDecoration.Underline)
+        )
     }
 
 }

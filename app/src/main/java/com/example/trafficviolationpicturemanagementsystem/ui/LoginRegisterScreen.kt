@@ -1,15 +1,28 @@
 package com.example.trafficviolationpicturemanagementsystem.ui
 
 import android.app.Application
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.trafficviolationpicturemanagementsystem.R
 import com.example.trafficviolationpicturemanagementsystem.data.repository.LoginRegisterResult
 import com.example.trafficviolationpicturemanagementsystem.ui.login.LoginScreen
 import com.example.trafficviolationpicturemanagementsystem.ui.register.RegisterScreen
@@ -25,32 +38,65 @@ fun LoginRegisterScreen(
     val loginRegisterResult by viewModel.loginRegisterResult.observeAsState()
 
     if(isRegistered){
-        LoginScreen(
-            onSwitchToRegister = {
-                isRegistered = false
-            },
-            onLogin = { username, password ->
-                viewModel.login(username, password){
-                    navController.navigate("home"){
-                        popUpTo("login") { inclusive = false }
+        AuthContainer(
+            title = stringResource(R.string.App_title)
+        ){
+            LoginScreen(
+                onSwitchToRegister = {
+                    isRegistered = false
+                },
+                onLogin = { username, password ->
+                    viewModel.login(username, password) {
+                        navController.navigate("home") {
+                            popUpTo("login") { inclusive = false }
+                        }
                     }
-                }
-            },
-            userNameError = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else "",
-            passwordError = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else ""
-        )
+                },
+                userNameError = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else "",
+                passwordError = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else ""
+            )
+        }
     } else {
-        RegisterScreen(
-            onSwitchToLogin = {
-                isRegistered = true
-            },
-            onRegister = { username, password ->
-                viewModel.register(username, password){
+        AuthContainer(
+            title = stringResource(R.string.App_title)
+        ){
+            RegisterScreen(
+                onSwitchToLogin = {
                     isRegistered = true
-                }
-            },
-            usernameRegistered = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else ""
-        )
+                },
+                onRegister = { username, password ->
+                    viewModel.register(username, password) {
+                        isRegistered = true
+                    }
+                },
+                usernameRegistered = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else ""
+            )
+        }
+    }
+}
+
+@Composable
+fun AuthContainer(
+    title: String,
+    content: @Composable () -> Unit
+){
+    Scaffold { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = title,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+            content()
+        }
     }
 }
 
