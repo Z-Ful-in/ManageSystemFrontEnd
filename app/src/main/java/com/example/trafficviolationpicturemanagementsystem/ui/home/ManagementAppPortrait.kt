@@ -49,12 +49,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.trafficviolationpicturemanagementsystem.R
 import com.example.trafficviolationpicturemanagementsystem.model.UserImage
 import com.example.trafficviolationpicturemanagementsystem.ui.state.UploadDialogState
@@ -154,7 +157,7 @@ fun ViewScreen(
     Box(
         modifier = modifier
     ) {
-        if(totalImages == 0) { // TODO
+        if(totalImages > 0) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -163,7 +166,11 @@ fun ViewScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 ImageWithText(
-                    imageItem = UserImage(1,"", "No image available"),
+                    imageItem = UserImage(
+                        id = userImageList[currentPage - 1].id,
+                        url = userImageList[currentPage - 1].url,
+                        description = userImageList[currentPage - 1].description
+                    ),
                     Modifier.fillMaxWidth()
                 )
 
@@ -254,25 +261,17 @@ fun ImageWithText(
                 .padding(24.dp)
                 .fillMaxWidth()
         ) {
-            Image(
-                painter = painterResource(R.drawable.ic_launcher_background),
-                contentDescription = null,
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageItem.url)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = imageItem.description,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(320.dp)
                     .aspectRatio(4f / 3f)
             )
-//            AsyncImage(
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(imageItem.url)
-//                    .crossfade(true)
-//                    .build(),
-//                contentDescription = imageItem.description,
-//                contentScale = ContentScale.Crop,
-//                modifier = Modifier
-//                    .size(320.dp)
-//                    .aspectRatio(4f / 3f)
-//            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = imageItem.description,
