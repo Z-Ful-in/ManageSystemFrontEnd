@@ -45,6 +45,7 @@ fun LoginRegisterScreen(
             LoginScreen(
                 onSwitchToRegister = {
                     isRegistered = false
+                    viewModel.clearResult()
                 },
                 onLogin = { username, password ->
                     viewModel.login(username, password) {
@@ -64,6 +65,7 @@ fun LoginRegisterScreen(
             RegisterScreen(
                 onSwitchToLogin = {
                     isRegistered = true
+                    viewModel.clearResult()
                 },
                 onRegister = { username, password ->
                     viewModel.register(username, password) {

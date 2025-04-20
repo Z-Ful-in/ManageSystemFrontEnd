@@ -22,6 +22,10 @@ open class AuthViewModel(application: Application): AndroidViewModel(application
         checkLoginStatus()
     }
 
+    fun clearResult(){
+        _loginRegisterResult.value = LoginRegisterResult.None
+    }
+
     fun checkLoginStatus(){
        viewModelScope.launch {
            _isLoggedIn.value = userRepository.isLoggedIn()
@@ -40,10 +44,7 @@ open class AuthViewModel(application: Application): AndroidViewModel(application
                     _isLoggedIn.value = true
                     navigateToHome()
                 }
-                is LoginRegisterResult.Error -> {
-                    _isLoggedIn.value = false
-                }
-                null -> {
+                else -> {
                     _isLoggedIn.value = false
                 }
             }
@@ -61,10 +62,7 @@ open class AuthViewModel(application: Application): AndroidViewModel(application
                     _isLoggedIn.value = false
                     navigateToLogin()
                 }
-                is LoginRegisterResult.Error -> {
-                    _isLoggedIn.value = false
-                }
-                null -> {
+                else -> {
                     _isLoggedIn.value = false
                 }
             }
