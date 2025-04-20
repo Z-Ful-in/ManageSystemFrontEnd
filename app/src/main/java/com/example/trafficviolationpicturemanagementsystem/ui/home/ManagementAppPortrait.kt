@@ -152,6 +152,7 @@ fun ViewScreen(
 ) {
     val userImageList by homeViewModel.userImageList.observeAsState(emptyList())
     var currentPage by remember { mutableIntStateOf(1) }
+    var rawValue by remember { mutableStateOf("1") }
     val totalImages = userImageList.size
     Box(
         modifier = modifier
@@ -160,7 +161,7 @@ fun ViewScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -197,18 +198,26 @@ fun ViewScreen(
                         )
                     }
                 }
-
-                OutlinedTextField(
-                    value = currentPage.toString(),
-                    onValueChange = {
-                        val page = it.toIntOrNull()
-                        if (page != null && page in 1..totalImages) {
-                            currentPage = page
-                        }
-                    },
-                    label = { Text("跳转到图片") },
-                    modifier = Modifier.width(120.dp)
-                )
+                Row(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    OutlinedTextField(
+                        value = rawValue,
+                        onValueChange = {
+                            rawValue = it
+                        },
+                        label = { Text("跳转到图片") },
+                        modifier = Modifier
+                            .width(120.dp)
+                            .height(60.dp)
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Button(onClick = {
+                        val page = rawValue.toIntOrNull()?.takeIf { it in 1..totalImages }
+                        page?.let { currentPage = it }
+                    }) { Text("跳转") }
+                }
                 DeleteImageButton(
                     {
                         homeViewModel.deleteImage(
@@ -268,10 +277,9 @@ fun ImageWithText(
                 contentDescription = imageItem.description,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(320.dp)
+                    .size(280.dp)
                     .aspectRatio(4f / 3f)
             )
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = imageItem.description,
                 style = MaterialTheme.typography.bodyLarge,
