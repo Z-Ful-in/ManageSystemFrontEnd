@@ -1,5 +1,6 @@
 package com.example.trafficviolationpicturemanagementsystem.ui.login
 
+import android.app.Application
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,20 +36,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.trafficviolationpicturemanagementsystem.R
+import com.example.trafficviolationpicturemanagementsystem.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
     onSwitchToRegister: () -> Unit,
     onLogin: (String, String) -> Unit,
-    passwordError: String = "",
+    viewModel: AuthViewModel,
     userNameError: String = "",
+    passwordError: String = ""
 ){
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    var isUsernameEmpty by remember { mutableStateOf(false) }
-    var isPasswordEmpty by remember { mutableStateOf(false) }
+
+
     var isPasswordVisible by remember { mutableStateOf(false) }
+
+    var usernameErrorState by remember { mutableStateOf("") }
+    var passwordErrorState by remember { mutableStateOf("") }
 
     var loading by remember { mutableStateOf(false) }
 
@@ -66,21 +72,22 @@ fun LoginScreen(
             value = username,
             onValueChange = {
                 username = it
-                isUsernameEmpty = false
+                usernameErrorState = ""
+                viewModel.clearResult()
                 loading = false
             },
             label = { Text(stringResource(R.string.username_label)) },
             placeholder = { Text(stringResource(R.string.username_placeholder)) },
             modifier = Modifier.padding(bottom = 8.dp),
-            isError = isUsernameEmpty,
+            isError = usernameErrorState.isNotBlank(),
             supportingText = {
-                if(isUsernameEmpty){
+                if(usernameErrorState.isNotBlank()){
                     Text(
-                        text = stringResource(R.string.username_hint),
+                        text = usernameErrorState,
                         color = MaterialTheme.colorScheme.error
                     )
                 }
-                else if(userNameError.isNotBlank()){
+                else if (userNameError.isNotBlank()){
                     Text(
                         text = userNameError,
                         color = MaterialTheme.colorScheme.error
@@ -92,17 +99,18 @@ fun LoginScreen(
             value = password,
             onValueChange = {
                 password = it
-                isPasswordEmpty = false
+                passwordErrorState = ""
+                viewModel.clearResult()
                 loading = false
             },
             label = { Text(stringResource(R.string.password_label)) },
             placeholder = { Text(stringResource(R.string.password_placeholder)) },
             modifier = Modifier.padding(bottom = 8.dp),
-            isError = isPasswordEmpty,
+            isError = passwordErrorState.isNotBlank(),
             supportingText = {
-                if(isPasswordEmpty){
+                if(passwordErrorState.isNotBlank()){
                     Text(
-                        text = stringResource(R.string.password_hint),
+                        text = passwordErrorState,
                         color = MaterialTheme.colorScheme.error
                     )
                 }
@@ -134,9 +142,9 @@ fun LoginScreen(
         )
         Button(
             onClick = {
-                isUsernameEmpty = username.isBlank()
-                isPasswordEmpty = password.isBlank()
-                if (!isUsernameEmpty && !isPasswordEmpty) {
+                if (username.isBlank())  usernameErrorState = "Username cannot be empty"
+                if (password.isBlank()) passwordErrorState = "Password cannot be empty"
+                if (usernameErrorState.isBlank() && passwordErrorState.isBlank()) {
                     onLogin(username, password)
                     loading = true
                 }
@@ -164,8 +172,12 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview(){
+    val application = Application()
     LoginScreen(
         onSwitchToRegister = {},
-        onLogin = { _, _ -> }
+        onLogin = { _, _ -> },
+        viewModel = AuthViewModel(application),
+        userNameError = "",
+        passwordError = ""
     )
 }

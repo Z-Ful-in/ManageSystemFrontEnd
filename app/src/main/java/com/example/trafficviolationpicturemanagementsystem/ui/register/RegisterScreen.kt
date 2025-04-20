@@ -1,5 +1,6 @@
 package com.example.trafficviolationpicturemanagementsystem.ui.register
 
+import android.app.Application
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -25,11 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.trafficviolationpicturemanagementsystem.R
+import com.example.trafficviolationpicturemanagementsystem.viewmodel.AuthViewModel
 
 @Composable
 fun RegisterScreen(
     onSwitchToLogin: () -> Unit,
     onRegister: (String, String) -> Unit,
+    viewModel: AuthViewModel,
     usernameRegistered: String = "",
 ) {
     var username by remember { mutableStateOf("") }
@@ -58,6 +62,7 @@ fun RegisterScreen(
             onValueChange = {
                 username = it
                 usernameError = ""
+                viewModel.clearResult()
             },
             label = { Text(stringResource(R.string.username_label)) },
             placeholder = { Text(stringResource(R.string.username_placeholder)) },
@@ -65,10 +70,16 @@ fun RegisterScreen(
             isError = usernameError.isNotBlank(),
             supportingText = {
                 if(usernameError.isNotBlank()){
-                    Text(usernameError)
+                    Text(
+                        text = usernameError,
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
                 else if (usernameRegistered.isNotBlank()){
-                    Text(usernameRegistered)
+                    Text(
+                        text = usernameRegistered,
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
             }
         )
@@ -156,8 +167,10 @@ fun checkPassword(password: String): String {
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
+    val application = Application()
     RegisterScreen(
         onSwitchToLogin = {},
-        onRegister = { _, _ -> }
+        onRegister = { _, _ -> },
+        viewModel = AuthViewModel(application) // MockAuthViewModel(application
     )
 }

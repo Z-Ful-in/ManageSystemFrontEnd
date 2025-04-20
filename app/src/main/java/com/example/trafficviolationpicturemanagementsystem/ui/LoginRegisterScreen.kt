@@ -54,6 +54,7 @@ fun LoginRegisterScreen(
                         }
                     }
                 },
+                viewModel,
                 userNameError = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else "",
                 passwordError = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else ""
             )
@@ -72,6 +73,7 @@ fun LoginRegisterScreen(
                         isRegistered = true
                     }
                 },
+                viewModel,
                 usernameRegistered = if (loginRegisterResult is LoginRegisterResult.Error) (loginRegisterResult as LoginRegisterResult.Error).error else ""
             )
         }
