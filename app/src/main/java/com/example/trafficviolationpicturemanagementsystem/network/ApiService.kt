@@ -26,7 +26,7 @@ interface ApiService {
 
     @GET("/images/user/{userName}")
     suspend fun getUserImages(
-        @Path("username") userName: String
+        @Path("userName") userName: String
     ): UserImageResponse
 
     @DELETE("/images/{id}")

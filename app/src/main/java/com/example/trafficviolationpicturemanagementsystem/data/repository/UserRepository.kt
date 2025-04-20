@@ -92,7 +92,6 @@ class UserRepository(private val context: Context) {
                 } catch (e: Exception) {
                     emptyList()
                 }
-                emptyList()
             }else
                 emptyList()
         }

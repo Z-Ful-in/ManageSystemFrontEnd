@@ -32,6 +32,7 @@ open class HomeViewModel(application: Application): AndroidViewModel(application
     init {
         _isPageSelected.value = 0
         getUserName()
+        getUserImages()
     }
     fun getUserName(){
        viewModelScope.launch {

@@ -360,7 +360,6 @@ fun UploadScreen(
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
-
                 )
             }else{
                 Icon(
