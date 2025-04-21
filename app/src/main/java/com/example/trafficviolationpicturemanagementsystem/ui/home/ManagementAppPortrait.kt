@@ -425,6 +425,12 @@ fun UploadScreen(
                     is UploadDialogState.NetworkError -> state.message
                     is UploadDialogState.FieldMissingError -> state.message
                     else -> ""
+                },
+                isSuccess = when(state){
+                    is UploadDialogState.UploadSuccess -> "成功"
+                    is UploadDialogState.NetworkError -> "失败"
+                    is UploadDialogState.FieldMissingError -> "失败"
+                    else -> ""
                 }
             )
         }
@@ -434,13 +440,14 @@ fun UploadScreen(
 @Composable
 fun UploadDialog(
     clearDialogState: () -> Unit,
-    message: String
+    message: String,
+    isSuccess: String
 ){
     AlertDialog(
         onDismissRequest = {
             clearDialogState()
         },
-        title = { Text("上传成功") },
+        title = { Text("上传$isSuccess") },
         text = { Text(message) },
         confirmButton = {
             TextButton(
