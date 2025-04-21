@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowLeft
@@ -166,71 +168,81 @@ fun ViewScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                ImageWithText(
-                    imageItem = UserImage(
-                        id = userImageList[currentPage - 1].id,
-                        url = userImageList[currentPage - 1].url,
-                        description = userImageList[currentPage - 1].description
-                    ),
-                    Modifier.fillMaxWidth()
-                )
-
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = { currentPage = (currentPage - 1).coerceAtLeast(1) }) {
-                        Icon(
-                            Icons.Default.KeyboardDoubleArrowLeft,
-                            contentDescription = "Previous Image"
-                        )
-                    }
-                    Text(
-                        text = "$currentPage/$totalImages",
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
-                    IconButton(onClick = {
-                        currentPage = (currentPage + 1).coerceAtMost(totalImages)
-                    }) {
-                        Icon(
-                            Icons.Default.KeyboardDoubleArrowRight,
-                            contentDescription = "Next Image"
-                        )
-                    }
-                }
-                Row(
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    OutlinedTextField(
-                        value = rawValue,
-                        onValueChange = {
-                            rawValue = it
-                        },
-                        label = { Text("跳转到图片") },
-                        modifier = Modifier
-                            .width(120.dp)
-                            .height(60.dp)
-                    )
-                    Spacer(modifier = Modifier.width(20.dp))
-                    Button(onClick = {
-                        val page = rawValue.toIntOrNull()?.takeIf { it in 1..totalImages }
-                        page?.let { currentPage = it }
-                    }) { Text("跳转") }
-                }
-                DeleteImageButton(
-                    {
-                        homeViewModel.deleteImage(
-                            userImageList[currentPage - 1].id,
-                            onDeleteSuccess = {
-                                homeViewModel.getUserImages()
-                            }
-                        )
-                    },
+                Column(
                     modifier = Modifier
-                        .padding(4.dp)
-                )
+                        .weight(5f)
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    ImageWithText(
+                        imageItem = userImageList[currentPage - 1],
+                        Modifier.fillMaxWidth()
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(3f)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = { currentPage = (currentPage - 1).coerceAtLeast(1) }) {
+                            Icon(
+                                Icons.Default.KeyboardDoubleArrowLeft,
+                                contentDescription = "Previous Image"
+                            )
+                        }
+                        Text(
+                            text = "$currentPage/$totalImages",
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+                        IconButton(onClick = {
+                            currentPage = (currentPage + 1).coerceAtMost(totalImages)
+                        }) {
+                            Icon(
+                                Icons.Default.KeyboardDoubleArrowRight,
+                                contentDescription = "Next Image"
+                            )
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.padding(bottom = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        OutlinedTextField(
+                            value = rawValue,
+                            onValueChange = {
+                                rawValue = it
+                            },
+                            label = { Text("跳转到图片") },
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(60.dp)
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Button(onClick = {
+                            val page = rawValue.toIntOrNull()?.takeIf { it in 1..totalImages }
+                            page?.let { currentPage = it }
+                        }) { Text("跳转") }
+                    }
+                    DeleteImageButton(
+                        onConfirmDelete = {
+                            homeViewModel.deleteImage(
+                                userImageList[currentPage - 1].id,
+                                onDeleteSuccess = {
+                                    homeViewModel.getUserImages()
+                                }
+                            )
+                        },
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                    )
+                }
             }
         }
         else{
