@@ -29,7 +29,7 @@ fun BottomNavigation(
                 )
             },
             label = { Text(text = "View",) },
-            selected = true,
+            selected = homeViewModel.isPageSelected.value == 0,
             onClick = {
                 homeViewModel.onViewClick()
             }
@@ -42,7 +42,7 @@ fun BottomNavigation(
                 )
             },
             label = { Text(text = "Upload",) },
-            selected = false,
+            selected = homeViewModel.isPageSelected.value == 1,
             onClick = {
                 homeViewModel.onUploadClick()
             }

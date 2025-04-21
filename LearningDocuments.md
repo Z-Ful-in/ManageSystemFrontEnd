@@ -55,4 +55,37 @@ homeViewModel和authViewModel传入AppNavGraph中， 以便在路由组件中使
 ##### LoginScreen
 接受了五个参数： OnSwitchToRegister, OnLogin, authViewModel, usernameError, passwordError
 1. OnSwitchToRegister: 回调函数， 用于点击后切换到注册页面， 再次基础上传入了一个authViewModel.clearResult()函数， 用于切换后刷新登录状态(loginRegisterResult字段置为LoginRegisterResult.None)
-2. OnLogin: 回调函数， 用于点击后登录， 传入了authViewModel.login(username, password, navigateToHome)函数， 用于发送登录请求。并在登录成功后调用navigateToHome跳转到主页， navigateToHome内部调用了homeViewModel.loadData()读取用户信息(读取用户信息是异步的， 不在这里读取的话), navigateToHome跳转到主页 
+2. OnLogin: 回调函数， 用于点击后登录， 传入了authViewModel.login(username, password, navigateToHome)函数， 用于发送登录请求。并在登录成功后调用navigateToHome跳转到主页， navigateToHome内部调用了homeViewModel.loadData(onComplete(()->Unit)?=null)先读取用户信息, 完毕后调用onComplete跳转到主页， 这样可以防止数据加载前就进入了主页
+3. authViewModel: 用于发送在点击修改TextField时清空登录状态
+4. usernameError: 用于传入后端返回的错误信息，这里主要是用户名或密码错误
+5. passwordError: 用于传入后端返回的错误信息，这里主要是用户名或密码错误
+
+该组件内部持有isPasswordVisible状态，usernameErrorState和passwordErrorState状态， 后面两个是前端用来控制管理TextField的状态的参数，
+前者是用于控制密码是否可见， 通过TextField中的visualTransformation字段控制：
+```kotlin
+ visualTransformation = if (isPasswordVisible) {
+    VisualTransformation.None
+} else {
+    PasswordVisualTransformation()
+}
+```
+而文本框最后的眼睛图标由trailingIcon控制， 内部传入一个IconButton组件，onClick后改变isPasswordVisible状态, 并传入一个Icon。
+
+对于切换到Register页面， 只需点击按钮， 调用OnSwitchToRegister函数即可
+
+##### RegisterScreen
+RegisterScreen与LoginScreen大同小异， 多了一些username和password的校验。 onRegister注册成功后并不会路由， 而是将isRegistered状态置为true, 进入登陆页面重新登录
+
+#### ManagementAppPortrait
+进入该页面都是由路由进入。 以前登陆过， 就在NavGraph处直接startDestination为home进入该页面， 以前未登陆过，就会通过login成功后navigate到该页面。
+
+进入ManagementAppPortrait时， 遇到过一个主要的问题： 页面没有数据， 即没有username和userImages数据。根据上述进入home页面的方式， 主要是以下两种原因：
+1. 之前登录过， 保存了username到dataStore中，但是homeViewScreen创建的时候调用init时，init内部没有调用getUserName和getUserImages分别从dataStore和服务器获取数据
+2. 之前未登陆过， 通过login进入home页面， 主要原因是loadData作为一个异步请求， 如果loadData内部没有传入一个onComplete回调函数， 会导致loadData没结束， 就navigate到home了，导致没有数据
+
+ManagementAppPortrait是一个Scaffold布局， 在bottomBar中有一个BottomNavigation组件， 然后页面上是一个HomeScreen组件
+
+##### BottomNavigation
+BottomNavigation组件是一个底部导航栏， 传入了一个homeViewModel参数。
+
+该Composable内部是一个NavigationBar组件，放了两个NavigationBarItem
