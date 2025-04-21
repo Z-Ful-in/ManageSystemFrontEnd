@@ -20,3 +20,39 @@
    val USERNAMEKEY = stringPreferencesKey("username")
    val getUsername = context.userDataStore.data.first[USERNAMEKEY] ?: ""
     ```
+   
+
+遵从上述思路， 写出homeScreen倒不是难事
+
+
+
+## 一些tips
+### 页面的主要逻辑
+在MainActivity新建了authViewModel和homeViewModel, 这两个viewmodel都有init函数， 
+前者会在创建时同步isLoggedIn状态， 读取userDataStore: DataStore中的IS_USER_LOGGER_IN字段，
+用于用于判断是否已经登录(每次登录时都会保存dataStore，如果上次已经登录， 就会保存preferences)。
+后者的init会调用getUserName和getUserImages函数， 首先从dataStore中读取username, 再发送
+Retrofit请求读取该用户的图片列表， 两个变量都会被存储到homeViewModel中
+
+新建两个viewmodel后， 首先创建NavController, 再从authViewModel中读取isLoggedIn状态，随后调用
+导航栏组件AppNavGraph， 传入NavController，并根据isLoggedIn决定startDestination, 同时把
+homeViewModel和authViewModel传入AppNavGraph中， 以便在路由组件中使用
+
+#### AppNavGraph
+如上面所说， 接受NavController, startDestination, 以及两个viewmodel参数， 函数内部实现了一个NavHost,
+传入参数navController, startDestination, 在lambda表达式中将我们的路由组件传入NavHost, 
+这里的路由组件有两个，composable("login") 和 composable("home")， 分别对应登录和主页的composable组件。
+
+#### LoginRegisterScreen
+在AppNavGraph导航栏中， composable("login")对应的组件是LoginRegisterScreen, 
+把authViewModel(用于登录),navController(用于路由跳转),以及homeViewModel(用于登录成功后传入读取用户数据回调函数)
+传入。 这里没有将LoginScreen和RegisterScreen分别设置路由， 是因为在LoginRegisterScreen中使用isRegistered字段统一管理了两者的状态。
+通过是在LoginRegisterScreen中还从authViewModel中读取了loginRegisterResult，用于将后端的登录结果展示到前端
+
+在实现LoginRegisterScreen时，用了AuthContainer(String, @Composable ()-> Unit)组件， 在LoginScreen和RegisterScreen上方展示统一的Text文本，
+并统一两者的布局(Scaffold{Column{}}, 因为刚开始没有使用该布局， 导致实现的LoginRegisterScreen不在屏幕正中央)， 槽位中分别放入LoginScreen和RegisterScreen
+
+##### LoginScreen
+接受了五个参数： OnSwitchToRegister, OnLogin, authViewModel, usernameError, passwordError
+1. OnSwitchToRegister: 回调函数， 用于点击后切换到注册页面， 再次基础上传入了一个authViewModel.clearResult()函数， 用于切换后刷新登录状态(loginRegisterResult字段置为LoginRegisterResult.None)
+2. OnLogin: 回调函数， 用于点击后登录， 传入了authViewModel.login(username, password, navigateToHome)函数， 用于发送登录请求。并在登录成功后调用navigateToHome跳转到主页， navigateToHome内部调用了homeViewModel.loadData()读取用户信息(读取用户信息是异步的， 不在这里读取的话), navigateToHome跳转到主页 

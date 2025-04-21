@@ -51,9 +51,10 @@ fun LoginRegisterScreen(
                 },
                 onLogin = { username, password ->
                     authViewModel.login(username, password) {
-                        homeViewModel.loadData()
-                        navController.navigate("home") {
-                            popUpTo("login") { inclusive = false }
+                        homeViewModel.loadData(){
+                            navController.navigate("home") {
+                                popUpTo("login") { inclusive = false }
+                            }
                         }
                     }
                 },

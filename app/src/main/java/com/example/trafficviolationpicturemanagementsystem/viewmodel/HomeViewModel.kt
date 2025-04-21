@@ -40,13 +40,15 @@ open class HomeViewModel(application: Application): AndroidViewModel(application
        }
     }
 
-    fun loadData(){
+    fun loadData(onComplete:(() -> Unit)? = null){
         viewModelScope.launch {
             val name = userRepository.getUserName()
             _userName.value = name
             _userImageList.value = userRepository.getUserImages(name)
+            onComplete?.invoke()
         }
     }
+
 
     fun onViewClick(){
         _isPageSelected.value = 0
