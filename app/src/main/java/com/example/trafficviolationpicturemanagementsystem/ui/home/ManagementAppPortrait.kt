@@ -414,58 +414,44 @@ fun UploadScreen(
         ) {
             Text("Upload Image")
         }
-        when(val state = dialogState){
-            is UploadDialogState.UploadSuccess -> {
-                AlertDialog(
-                    onDismissRequest = { dialogState = UploadDialogState.None },
-                    title = { Text("上传成功") },
-                    text = { Text(state.message) },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                dialogState = UploadDialogState.None
-                            }
-                        ) {
-                            Text("确认")
-                        }
-                    }
-                )
-            }
-            is UploadDialogState.NetworkError -> {
-                AlertDialog(
-                    onDismissRequest = { dialogState = UploadDialogState.None },
-                    title = { Text("网络错误") },
-                    text = { Text(state.message) },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                dialogState = UploadDialogState.None
-                            }
-                        ) {
-                            Text("确认")
-                        }
-                    }
-                )
-            }
-            is UploadDialogState.FieldMissingError -> {
-                AlertDialog(
-                    onDismissRequest = { dialogState = UploadDialogState.None },
-                    title = { Text("字段缺失") },
-                    text = { Text(state.message) },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                dialogState = UploadDialogState.None
-                            }
-                        ) {
-                            Text("确认")
-                        }
-                    }
-                )
-            }
-            else -> {}
+        val state = dialogState
+        if(state != UploadDialogState.None){
+            UploadDialog(
+                clearDialogState = {
+                    dialogState = UploadDialogState.None
+                },
+                message = when(state){
+                    is UploadDialogState.UploadSuccess -> state.message
+                    is UploadDialogState.NetworkError -> state.message
+                    is UploadDialogState.FieldMissingError -> state.message
+                    else -> ""
+                }
+            )
         }
     }
+}
+
+@Composable
+fun UploadDialog(
+    clearDialogState: () -> Unit,
+    message: String
+){
+    AlertDialog(
+        onDismissRequest = {
+            clearDialogState()
+        },
+        title = { Text("上传成功") },
+        text = { Text(message) },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    clearDialogState()
+                }
+            ) {
+                Text("确认")
+            }
+        }
+    )
 }
 
 
