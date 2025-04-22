@@ -414,7 +414,7 @@ fun UploadScreen(
                             homeViewModel.getUserImages()
                         },
                         onUploadFailed = {
-                            dialogState = UploadDialogState.NetworkError("网络连接失败， 请检查你的网络设置")
+                            dialogState = UploadDialogState.NetworkError("无效图片，请上传清晰的交通违章照片")
                         }
                     )
                 }
