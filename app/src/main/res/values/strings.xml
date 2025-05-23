@@ -1,15 +1,15 @@
 <resources>
-    <string name="app_name">Traffic Violation Picture Management System</string>
-    <string name="username_placeholder">Enter your username</string>
-    <string name="username_label">Username</string>
-    <string name="username_hint">Username cannot be empty</string>
-    <string name="password_label">Password</string>
-    <string name="password_placeholder">Enter your password</string>
-    <string name="password_hint">password cannot be empty</string>
-    <string name="click_to_register">Don\'t have an account? Click here to register</string>
-    <string name="password_visibility">Switch password visibility</string>
-    <string name="confirm_label">Confirm Password</string>
-    <string name="confirm_placeholder">Re-enter your password</string>
-    <string name="confirm_password_hint">Password not match</string>
-    <string name="App_title">Traffic Violation Picture Management</string>
+    <string name="app_name">违章图片管理系统</string>
+    <string name="username_placeholder">输入用户名</string>
+    <string name="username_label">用户名</string>
+    <string name="username_hint">用户名不能为空</string>
+    <string name="password_label">密码</string>
+    <string name="password_placeholder">输入密码</string>
+    <string name="password_hint">密码不能为空</string>
+    <string name="click_to_register">还没有账户？点击注册</string>
+    <string name="password_visibility">切换密码可见性</string>
+    <string name="confirm_label">确认密码</string>
+    <string name="confirm_placeholder">再次输入密码</string>
+    <string name="confirm_password_hint">两次输入的密码不一致</string>
+    <string name="App_title">违章图片管理系统</string>
 </resources>

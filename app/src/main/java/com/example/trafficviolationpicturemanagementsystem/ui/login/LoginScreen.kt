@@ -64,7 +64,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Login",
+            text = "登录",
             modifier = Modifier.padding(bottom = 32.dp),
             fontSize = 24.sp,
         )
@@ -142,8 +142,8 @@ fun LoginScreen(
         )
         Button(
             onClick = {
-                if (username.isBlank())  usernameErrorState = "Username cannot be empty"
-                if (password.isBlank()) passwordErrorState = "Password cannot be empty"
+                if (username.isBlank())  usernameErrorState = "用户名不能为空"
+                if (password.isBlank()) passwordErrorState = "密码不能为空"
                 if (usernameErrorState.isBlank() && passwordErrorState.isBlank()) {
                     onLogin(username, password)
                     loading = true
@@ -152,7 +152,7 @@ fun LoginScreen(
             modifier = Modifier.padding(top = 8.dp),
             enabled = !loading
         ) {
-            Text(text = "Login")
+            Text(text = "登录")
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(

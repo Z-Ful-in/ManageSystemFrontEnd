@@ -110,7 +110,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Welcome, $userName",
+                    text = "欢迎 $userName",
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(start = 16.dp, top = 6.dp)
                 )
@@ -424,7 +424,7 @@ fun UploadScreen(
             },
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
-            Text("Upload Image")
+            Text("点击上传")
         }
         val state = dialogState
         if(state != UploadDialogState.None){

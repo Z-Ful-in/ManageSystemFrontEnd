@@ -53,7 +53,7 @@ fun RegisterScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Register",
+            text = "注册",
             modifier = Modifier.padding(bottom = 32.dp),
             fontSize = 24.sp,
         )
@@ -130,11 +130,11 @@ fun RegisterScreen(
             modifier = Modifier.padding(top = 8.dp),
             enabled = !loading,
         ) {
-            Text(text = "Register")
+            Text(text = "注册")
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Click to Login",
+            text = "点击登录",
             color = Color.Blue,
             modifier = Modifier
                 .clickable {
@@ -150,16 +150,16 @@ fun RegisterScreen(
 
 fun checkUsername(username: String): String {
     return when {
-        username.isBlank() -> "Username cannot be empty"
-        username.length < 3 -> "Username must be at least 3 characters"
+        username.isBlank() -> "用户名不能为空"
+        username.length < 3 -> "用户名长度至少为3个字符"
         else -> ""
     }
 }
 
 fun checkPassword(password: String): String {
     return when {
-        password.isBlank() -> "Password cannot be empty"
-        password.length < 6 -> "Password must be at least 6 characters"
+        password.isBlank() -> "密码不能为空"
+        password.length < 6 -> "密码长度至少为6个字符"
         else -> ""
     }
 }

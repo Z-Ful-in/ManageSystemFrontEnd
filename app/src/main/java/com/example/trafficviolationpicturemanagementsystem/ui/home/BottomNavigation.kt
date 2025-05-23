@@ -28,7 +28,7 @@ fun BottomNavigation(
                     contentDescription = null
                 )
             },
-            label = { Text(text = "View",) },
+            label = { Text(text = "查看图片",) },
             selected = homeViewModel.isPageSelected.value == 0,
             onClick = {
                 homeViewModel.onViewClick()
@@ -41,7 +41,7 @@ fun BottomNavigation(
                     contentDescription = null
                 )
             },
-            label = { Text(text = "Upload",) },
+            label = { Text(text = "上传图片",) },
             selected = homeViewModel.isPageSelected.value == 1,
             onClick = {
                 homeViewModel.onUploadClick()
